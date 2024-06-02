@@ -13,6 +13,7 @@ if not "stories" in db.data:
     db.data["stories"] = {}
 
 signal_client = SignalClient(db, PHONE_NUMBER)
+#signal_client.recieve_messages()
 
 @app.route('/')
 def index():
@@ -35,7 +36,7 @@ def story_view(story_id):
 
 @app.get("/story/<story_id>/media")
 def get_story_media(story_id):
-    filename = db.data["stories"][story_id]["media"]
+    filename = db.data["stories"][story_id]["media"]["filename"]
     return send_from_directory(os.path.join(SIGNAL_CLI_DIRECTORY, "attachments"), filename)
 
 @app.get("/story/<story_id>/avatar")

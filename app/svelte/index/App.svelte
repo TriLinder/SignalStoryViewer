@@ -1,10 +1,25 @@
 <script lang="ts">
+	import { onMount } from "svelte";
 	import { currentPageStore } from "../stores";
 
 	import Overview from "./pages/Overview.svelte";
+	import StoryView from "./pages/StoryView.svelte";
+
+	onMount(function() {
+		document.addEventListener("keydown", function(event) {
+			if (event.key == "Escape") {
+				$currentPageStore = "overview";
+			}
+		});
+	});
 </script>
 
 <style>
+	:global(*) {
+		font-family: sans-serif;
+		font-size: 16px;
+	}
+
 	.center {
 		display: flex;
 		justify-content: center;
@@ -16,20 +31,17 @@
 		align-items: center;
 		justify-content: center;
 
-		max-width: 800px;
 		width: 100%;
 		height: 100vh;
 	}
 </style>
 
-<svelte:head>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-</svelte:head>
-
 <div class="center">
 	<div class="content">
 		{#if $currentPageStore == "overview"}
 			<Overview/>
+		{:else if $currentPageStore == "storyView"}
+			<StoryView/>
 		{/if}
 	</div>
 </div>

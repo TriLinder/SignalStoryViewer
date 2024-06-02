@@ -45,6 +45,7 @@
     .text {
         display: flex;
         flex-direction: column;
+        text-align: left;
     }
 </style>
 
@@ -52,7 +53,7 @@
     <img class="avatar" src={`/story/${story.id}/avatar`} alt={`${story.sender.name}'s avatar`}>
 
     <div class="text">
-        <span class="name">{story.sender.name}</span>
-        <span class="name">{timestampText}</span>
+        <span class="name"><b>{story.sender.name}</b></span>
+        <span class="date">{timestampText}</span>
     </div>
 </button>

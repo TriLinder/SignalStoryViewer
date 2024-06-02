@@ -38,12 +38,15 @@ class SignalClient:
                 "number": envelope["sourceNumber"],
                 "name": envelope["sourceName"],
             },
-            "media": envelope["storyMessage"]["fileAttachment"]["id"],
+            "media": {
+                "type": envelope["storyMessage"]["fileAttachment"]["contentType"].split("/")[0],
+                "filename": envelope["storyMessage"]["fileAttachment"]["id"]
+            },
             "caption": envelope["storyMessage"]["fileAttachment"]["caption"],
             "viewed": False
         }
 
-        self.db.save_to_disk() #Simply appending the dictionary does not trigger a database re-save on its own
+        self.db.save_to_disk() #Simply changing the dictionary does not trigger a database re-save on its own
 
     def send_view_receipt(self, sender_number, message_timestamp):
         print("Sending view receipt")

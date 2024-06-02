@@ -40,6 +40,13 @@ function rollupPlugins(index) {
 				// enable run-time checks when not in production
 				dev: !production
 			},
+			onwarn: (warning, handler) => { // https://stackoverflow.com/a/61277660/15825947
+				// e.g. don't warn on a11y-autofocus
+				if (warning.code === 'a11y-autofocus') return
+		
+				// let Rollup handle all other warnings normally
+				handler(warning)
+			},
 			preprocess: sveltePreprocess({})
 		}),
 		// we'll extract any component CSS out into

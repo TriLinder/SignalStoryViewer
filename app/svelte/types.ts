@@ -5,7 +5,10 @@ export type Story = {
         name: string;
         number: string;
     }
-    media: string;
+    media: {
+        type: "image" | "video";
+        filename: string;
+    };
     caption: string;
     viewed: boolean;
 }
