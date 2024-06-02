@@ -1,9 +1,10 @@
 from flask import Flask, send_from_directory, make_response
+from flask_svelte import render_template
 import os
 
-from config import SIGNAL_CLI_DIRECTORY, PHONE_NUMBER
-from database import Database
-from signal_client import SignalClient
+from .config import SIGNAL_CLI_DIRECTORY, PHONE_NUMBER
+from .database import Database
+from .signal_client import SignalClient
 
 app = Flask(__name__)
 
@@ -12,6 +13,10 @@ if not "stories" in db.data:
     db.data["stories"] = {}
 
 signal_client = SignalClient(db, PHONE_NUMBER)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.get("/stories")
 def get_stories():

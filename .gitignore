@@ -1,4 +1,7 @@
-__pycache__/*
-config.py
+venv/*
+node_modules/*
+*/__pycache__/*
+app/static/svelte/*
+app/config.py
 db.json
 db.json.old

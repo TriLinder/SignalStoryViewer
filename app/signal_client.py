@@ -2,7 +2,7 @@ import subprocess
 import json
 import uuid
 
-from database import Database
+from .database import Database
 
 class SignalClient:
     def __init__(self, db: Database, phone_number: str) -> None:
