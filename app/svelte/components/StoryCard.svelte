@@ -4,7 +4,7 @@
 
     export let story: Story;
 
-    $: timestampText = new Date(story.timestamp).toLocaleString();
+    $: timestampText = new Date(story.timestamp).toLocaleString("cs-CZ", {dateStyle: "medium", timeStyle: "short"});
 
     function onClick() {
         $currentPageStore = "storyView";

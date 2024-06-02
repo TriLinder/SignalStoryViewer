@@ -4,7 +4,7 @@
 
     $: story = $storyViewPageStory;
     $: mediaSrc = `/story/${story.id}/media`;
-    $: timestampText = new Date(story.timestamp).toLocaleString();
+    $: timestampText = new Date(story.timestamp).toLocaleString("cs-CZ", {dateStyle: "medium", timeStyle: "short"})
 
 
     async function markStoryAsViewed() {

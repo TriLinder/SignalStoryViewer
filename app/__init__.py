@@ -21,7 +21,7 @@ def index():
 
 @app.get("/stories")
 def get_stories():
-    return list(db.data["stories"].values())
+    return sorted(list(db.data["stories"].values()), key=lambda story: story["timestamp"], reverse=True)
 
 @app.route("/story/<story_id>/view")
 def story_view(story_id):
