@@ -34,7 +34,10 @@ class SignalClient:
         self.db.data["stories"][story_id] = {
             "id": story_id,
             "timestamp": envelope["timestamp"],
-            "sender": envelope["sourceNumber"],
+            "sender": {
+                "number": envelope["sourceNumber"],
+                "name": envelope["sourceName"],
+            },
             "media": envelope["storyMessage"]["fileAttachment"]["id"],
             "caption": envelope["storyMessage"]["fileAttachment"]["caption"],
             "viewed": False
@@ -42,7 +45,7 @@ class SignalClient:
 
         self.db.save_to_disk() #Simply appending the dictionary does not trigger a database re-save on its own
 
-    def send_view_receipt(self, sender, message_timestamp):
+    def send_view_receipt(self, sender_number, message_timestamp):
         print("Sending view receipt")
-        result = subprocess.run(f'signal-cli --output=json -a {self.phone_number} sendReceipt --type viewed "{sender}" -t {message_timestamp}', capture_output=True, text=True, shell=True)
+        result = subprocess.run(f'signal-cli --output=json -a {self.phone_number} sendReceipt --type viewed "{sender_number}" -t {message_timestamp}', capture_output=True, text=True, shell=True)
         print(result.stdout, result.stderr)

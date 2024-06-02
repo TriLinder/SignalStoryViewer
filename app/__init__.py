@@ -27,7 +27,7 @@ def story_view(story_id):
     story = db.data["stories"][story_id]
 
     if not story["viewed"]:
-        signal_client.send_view_receipt(story["sender"], story["timestamp"])
+        signal_client.send_view_receipt(story["sender"]["number"], story["timestamp"])
         db.data["stories"][story_id]["viewed"] = True
         db.save_to_disk()
 
@@ -40,7 +40,7 @@ def get_story_media(story_id):
 
 @app.get("/story/<story_id>/avatar")
 def get_story_sender_avatar(story_id):
-    sender = db.data["stories"][story_id]["sender"]
+    sender = db.data["stories"][story_id]["sender"]["number"]
     return send_from_directory(os.path.join(SIGNAL_CLI_DIRECTORY, "avatars"), f"profile-{sender}")
 
 if __name__ == "__main__":
