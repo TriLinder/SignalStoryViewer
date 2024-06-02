@@ -24,7 +24,9 @@ class SignalClient:
         for message in messages:
             if "envelope" in message:
                 if "storyMessage" in message["envelope"]:
-                    self.process_story_message(message)    
+                    self.process_story_message(message)
+                else:
+                    print(f"Unknown message: `{message}`")
 
                 time.sleep(0.25)    
 

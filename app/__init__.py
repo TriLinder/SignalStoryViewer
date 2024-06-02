@@ -39,6 +39,8 @@ def processing_thread():
 
             for story_id in stories_to_delete:
                 print(f"Deleting old story: {story_id}")
+                media_filename = db.data["stories"][story_id]["media"]["filename"]
+                os.remove(os.path.join(SIGNAL_CLI_DIRECTORY, "attachments", media_filename))
                 db.data["stories"].pop(story_id, None)
 
             #Recieve new stories
