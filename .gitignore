@@ -5,3 +5,4 @@ app/static/svelte/*
 app/config.py
 db.json
 db.json.old
+db.json.new

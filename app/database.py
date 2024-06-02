@@ -54,9 +54,9 @@ class Database:
                 'data': self.data
             }
 
-        #Add ourself to the queue and wait for our turn
+        #Add ourselves to the queue and wait for our turn
         self.queue.append(queue_key)
-        
+
         while self.queue[0] != queue_key:
             time.sleep(0.01)
 
@@ -65,5 +65,10 @@ class Database:
             shutil.copy2(self.path, f'{self.path}.old')
 
         #Now save our changes to disk
-        with open(self.path, 'w') as f:
+        with open(f'{self.path}.new', 'w') as f:
             json.dump(output, f, ensure_ascii=True, separators=(',', ':'))
+
+        #And overwrite the file
+        shutil.move(f'{self.path}.new', self.path)
+
+        self.queue.pop()

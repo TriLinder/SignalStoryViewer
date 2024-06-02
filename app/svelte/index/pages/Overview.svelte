@@ -11,7 +11,10 @@
         stories = await response.json();
     }
 
-    onMount(loadStories);
+    onMount(function() {
+        loadStories();
+        setInterval(loadStories, 30*1000);
+    });
 </script>
 
 <style>
@@ -35,7 +38,7 @@
             <StoryCard {story}/>
         {:else}
             <span class="empty-set-symbol">∅</span>
-            There currently aren't any stories. Check back later! :)
+            There aren't any stories here at the moment. Check back later! :)
         {/each}
     </div>
 {/if}

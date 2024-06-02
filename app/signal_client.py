@@ -1,6 +1,7 @@
 import subprocess
 import json
 import uuid
+import time
 
 from .database import Database
 
@@ -23,7 +24,9 @@ class SignalClient:
         for message in messages:
             if "envelope" in message:
                 if "storyMessage" in message["envelope"]:
-                    self.process_story_message(message)        
+                    self.process_story_message(message)    
+
+                time.sleep(0.25)    
 
     def process_story_message(self, message) -> None:
         print(f"Processing story message: `{message}`")
