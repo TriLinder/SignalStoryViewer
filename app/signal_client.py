@@ -4,6 +4,7 @@ import uuid
 import time
 
 from .database import Database
+from .config import SIGNAL_CLI_PATH
 
 class SignalClient:
     def __init__(self, db: Database, phone_number: str) -> None:
@@ -11,7 +12,7 @@ class SignalClient:
         self.phone_number = phone_number
 
     def recieve_messages(self) -> None:
-        result = subprocess.run(f"signal-cli --output=json -a {self.phone_number} receive", capture_output=True, text=True, shell=True)
+        result = subprocess.run([SIGNAL_CLI_PATH,  "--output=json",  "-a", self.phone_number, "receive"], capture_output=True, text=True)
         messages = []
 
         for line in result.stdout.split("\n"):
@@ -55,5 +56,5 @@ class SignalClient:
 
     def send_view_receipt(self, sender_number, message_timestamp):
         print("Sending view receipt")
-        result = subprocess.run(f'signal-cli --output=json -a {self.phone_number} sendReceipt --type viewed "{sender_number}" -t {message_timestamp}', capture_output=True, text=True, shell=True)
+        result = subprocess.run([SIGNAL_CLI_PATH, "--output=json", "-a", self.phone_number, "sendReceipt", "--type", "viewed", sender_number, "-t", str(message_timestamp)], capture_output=True, text=True)
         print(result.stdout, result.stderr)
