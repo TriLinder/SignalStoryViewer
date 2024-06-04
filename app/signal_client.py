@@ -13,7 +13,7 @@ class SignalClient:
         self.phone_number = phone_number
 
     def recieve_messages(self) -> None:
-        result = subprocess.run(["flatpak run org.asamk.SignalCli",  "--output=json",  "-a", self.phone_number, "receive"], capture_output=True, text=True)
+        result = subprocess.run(["flatpak", "run", "org.asamk.SignalCli",  "--output=json",  "-a", self.phone_number, "receive"], capture_output=True, text=True)
         messages = []
 
         for line in result.stdout.split("\n"):
@@ -73,7 +73,7 @@ class SignalClient:
 
     def send_view_receipt(self, sender_number, message_timestamp):
         print("Sending view receipt")
-        result = subprocess.run([SIGNAL_CLI_PATH, "--output=json", "-a", self.phone_number, "sendReceipt", "--type", "viewed", sender_number, "-t", str(message_timestamp)], capture_output=True, text=True)
+        result = subprocess.run(["flatpak", "run", "org.asamk.SignalCli", "--output=json", "-a", self.phone_number, "sendReceipt", "--type", "viewed", sender_number, "-t", str(message_timestamp)], capture_output=True, text=True)
         print(result.stdout, result.stderr)
 
     def get_story_id_from_timestamp(self, timestamp):
@@ -88,7 +88,7 @@ class SignalClient:
 
         media_filename = self.db.data["stories"][story_id]["media"]["filename"]
         try:
-            os.remove(os.path.join("flatpak run org.asamk.SignalCli", "attachments", media_filename))
+            os.remove(os.path.join(SIGNAL_CLI_DIRECTORY, "attachments", media_filename))
         except Exception as e:
             print(f"Failed to delete story media: {e}")
         self.db.data["stories"].pop(story_id, None)
