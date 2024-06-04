@@ -22,6 +22,12 @@
         display: flex;
         flex-direction: column;
         gap: 15px;
+
+        max-height: 95vh;
+        overflow-y: scroll;
+        width: 100%;
+        
+        align-items: center;
     }
 
     .empty-set-symbol {

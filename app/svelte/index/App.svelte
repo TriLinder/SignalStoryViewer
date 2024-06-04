@@ -18,6 +18,7 @@
 	:global(*) {
 		font-family: sans-serif;
 		font-size: 16px;
+		overflow: hidden;
 	}
 
 	.center {

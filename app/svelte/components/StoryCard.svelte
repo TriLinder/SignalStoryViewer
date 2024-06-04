@@ -20,6 +20,8 @@
     }
 
     .content {
+        width: 300px;
+
         border-style: solid;
         border-color: gray;
         border-width: 2px;
