@@ -1,10 +1,11 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onMount, onDestroy } from "svelte";
     import type { Story } from "../../types";
 
     import StoryCard from "../../components/StoryCard.svelte";
 
     let stories: Story[] | null = null;
+    let loadStoriesIntervalId: number;
 
     async function loadStories() {
         const response = await fetch("/stories");
@@ -13,7 +14,11 @@
 
     onMount(function() {
         loadStories();
-        setInterval(loadStories, 30*1000);
+        loadStoriesIntervalId = setInterval(loadStories, 30*1000);
+    });
+
+    onDestroy(function() {
+        clearInterval(loadStoriesIntervalId);
     });
 </script>
 
@@ -26,7 +31,7 @@
         max-height: 95vh;
         overflow-y: scroll;
         width: 100%;
-        
+
         align-items: center;
     }
 
