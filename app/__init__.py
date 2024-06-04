@@ -82,6 +82,4 @@ def get_story_sender_avatar(story_id):
     sender = db.data["stories"][story_id]["sender"]["number"]
     return send_from_directory(os.path.join(SIGNAL_CLI_DIRECTORY, "avatars"), f"profile-{sender}")
 
-if True or __name__ == "__name__":
-    threading.Thread(target=processing_thread).start()
-    app.run(port=5000, threaded=True, debug=False)
+threading.Thread(target=processing_thread).start()
