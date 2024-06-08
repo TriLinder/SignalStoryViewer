@@ -80,6 +80,10 @@ def get_story_media(story_id):
 @app.get("/story/<story_id>/avatar")
 def get_story_sender_avatar(story_id):
     sender = db.data["stories"][story_id]["sender"]["number"]
-    return send_from_directory(os.path.join(SIGNAL_CLI_DIRECTORY, "avatars"), f"profile-{sender}")
 
-threading.Thread(target=processing_thread).start()
+    try:
+        return send_from_directory(os.path.join(SIGNAL_CLI_DIRECTORY, "avatars"), f"profile-{sender}")
+    except:
+        return send_from_directory(os.path.join("assets"), "default_avatar.svg")
+
+threading.Thread(target=processing_thread, daemon=True).start()
