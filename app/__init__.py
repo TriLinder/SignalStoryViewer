@@ -4,7 +4,7 @@ import os
 import time
 import threading
 
-from .config import SIGNAL_CLI_DIRECTORY, PHONE_NUMBER, PROCESSING_INTERVAL
+from .config import SIGNAL_CLI_DIRECTORY, PHONE_NUMBER, PROCESSING_INTERVAL, STORY_LIFETIME_DURATION, STORY_EXPIRATION_MODE, CLASSIC, WAIT_UNTIL_SEEN
 from .database import Database
 from .signal_client import SignalClient
 
@@ -31,11 +31,13 @@ def processing_thread():
         last_processing_thread_timestamp = start_time
 
         try:
-            #Delete old (> 24h) stories
+            #Delete old stories
             stories_to_delete = []
+            
             for story_id, story in dict(db.data["stories"]).items():
-                if (story["timestamp"] / 1000) + 24*60*60 < time.time():
-                    stories_to_delete.append(story_id)
+                if (STORY_EXPIRATION_MODE == CLASSIC) or (STORY_EXPIRATION_MODE == WAIT_UNTIL_SEEN and story["viewed"]):
+                    if (story["timestamp"] / 1000) + STORY_LIFETIME_DURATION < time.time():
+                        stories_to_delete.append(story_id)
 
             for story_id in stories_to_delete:
                 print(f"Deleting old story: {story_id}")
@@ -68,7 +70,9 @@ def story_view(story_id):
     if not story["viewed"]:
         db.data["stories"][story_id]["viewed"] = True
         db.save_to_disk()
-        signal_client.send_view_receipt(story["sender"]["number"], story["timestamp"])
+
+        if time.time() < (story["timestamp"] / 1000) + STORY_LIFETIME_DURATION:
+            signal_client.send_view_receipt(story["sender"]["number"], story["timestamp"])
 
     return make_response("", 204)
 

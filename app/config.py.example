@@ -1,0 +1,11 @@
+class CLASSIC: pass
+class WAIT_UNTIL_SEEN: pass
+
+SIGNAL_CLI_DIRECTORY = "/home/james/.var/app/org.asamk.SignalCli/data/signal-cli/" # The data directory of signal-cli, which should be installed through Flatpak 
+PHONE_NUMBER = "+123456789"
+PROCESSING_INTERVAL = 60 # How often to fetch new stories (and delete old ones) - in seconds
+STORY_LIFETIME_DURATION = 24 * 60 * 60 # Duration until the story expires (typically 24 hours)
+
+# Determines whether stories disappear automatically after their lifetime lapses (typically 24 hours),
+# or only after they have been seen (WAIT_UNTIL_SEEN) 
+STORY_EXPIRATION_MODE = CLASSIC
