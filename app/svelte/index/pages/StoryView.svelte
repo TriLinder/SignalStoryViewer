@@ -1,11 +1,11 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { currentPageStore, storyViewPageStory } from "../../stores";
+    
+    import RelativeDate from "../../components/RelativeDate.svelte";
 
     $: story = $storyViewPageStory;
     $: mediaSrc = `/story/${story.id}/media`;
-    $: timestampText = new Date(story.timestamp).toLocaleString("cs-CZ", {dateStyle: "medium", timeStyle: "short"})
-
 
     async function markStoryAsViewed() {
         fetch(`/story/${story.id}/view`);
@@ -88,10 +88,9 @@
             <button class="back-button" on:click={function() {$currentPageStore = "overview"}}>←</button>
             <div class="text">
                 <span class="name"><b>{story.sender.name}</b></span>
+                <span class="date"><RelativeDate timestamp={story.timestamp}/></span>
                 {#if story.caption}
                     <p class="caption">{story.caption}</p>
-                {:else}
-                    <span class="date">{timestampText}</span>
                 {/if}
             </div>
         </div>

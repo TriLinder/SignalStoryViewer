@@ -1,6 +1,7 @@
 <script lang="ts">
     import { currentPageStore, storyViewPageStory } from "../stores";
     import type { Story } from "../types";
+    import RelativeDate from "./RelativeDate.svelte";
 
     export let story: Story;
 
@@ -56,6 +57,6 @@
 
     <div class="text">
         <span class="name"><b>{story.sender.name}</b></span>
-        <span class="date">{timestampText}</span>
+        <span class="date"><RelativeDate timestamp={story.timestamp}/></span>
     </div>
 </button>
