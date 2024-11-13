@@ -71,7 +71,7 @@ def story_view(story_id):
         db.data["stories"][story_id]["viewed"] = True
         db.save_to_disk()
 
-        if time.time() < (story["timestamp"] / 1000) + STORY_LIFETIME_DURATION:
+        if time.time() < (story["timestamp"] / 1000) + 24*60*60:
             signal_client.send_view_receipt(story["sender"]["number"], story["timestamp"])
 
     return make_response("", 204)
