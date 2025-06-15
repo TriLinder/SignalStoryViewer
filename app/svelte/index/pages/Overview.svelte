@@ -49,7 +49,6 @@
             <StoryCard {story}/>
         {:else}
             <span class="empty-set-symbol">∅</span>
-            There aren't any stories here at the moment. Check back later! :)
         {/each}
     </div>
 {/if}
