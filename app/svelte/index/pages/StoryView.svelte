@@ -37,7 +37,7 @@
     }
 
     .navbar {
-        background-color: rgba(250, 250, 250, .9);
+        background-color: rgba(0, 0, 0, .8);
 
         color: white;
 
