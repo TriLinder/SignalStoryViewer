@@ -100,7 +100,7 @@
         <div class="navbar">
             <div class="buttons">
                 <button class="back-button" on:click={function() {$currentPageStore = "overview"}}>✖</button>
-                <button class="reply-button" on:click={reply}>💬</button>
+                <button class="reply-button" on:click={reply}>✉︎</button>
             </div>
             <div class="text">
                 <span class="name"><b>{story.sender.name}</b></span>
