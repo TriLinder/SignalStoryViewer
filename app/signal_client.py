@@ -77,7 +77,7 @@ class SignalClient:
 
     def reply_to_story(self, sender_number, story_timestamp, reply_body):
         print("Replying to a story")
-        subprocess.run(["flatpak", "run", "org.asamk.SignalCli", "--output=json", "-a", self.phone_number, "send", "--storyTimestamp", story_timestamp, "--story-author", sender_number, "-m", reply_body, sender_number])
+        subprocess.run(["flatpak", "run", "org.asamk.SignalCli", "--output=json", "-a", self.phone_number, "send", "--storyTimestamp", str(story_timestamp), "--story-author", sender_number, "-m", reply_body, sender_number])
 
     def send_message(self, reciever_number, message_body):
         print("Sending a message")
