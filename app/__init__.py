@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory, make_response
+from flask import Flask, send_from_directory, make_response, request
 from flask_svelte import render_template
 import os
 import time
@@ -17,6 +17,9 @@ if not "stories" in db.data:
 signal_client = SignalClient(db, PHONE_NUMBER)
 
 last_processing_thread_timestamp = 0
+
+def is_story_expired_on_signal(story):
+    return time.time() > (story["timestamp"] / 1000) + 24*60*60
 
 def processing_thread():
     global last_processing_thread_timestamp
@@ -71,8 +74,24 @@ def story_view(story_id):
         db.data["stories"][story_id]["viewed"] = True
         db.save_to_disk()
 
-        if time.time() < (story["timestamp"] / 1000) + 24*60*60:
+        if not is_story_expired_on_signal(story):
             signal_client.send_view_receipt(story["sender"]["number"], story["timestamp"])
+
+    return make_response("", 204)
+
+@app.post("/story/<story_id>/reply")
+def story_reply(story_id):
+    story = db.data["stories"][story_id]
+
+    if not request.json:
+        return make_response("Missing body", 400)
+
+    reply_body = request.json["body"].strip()
+
+    if not is_story_expired_on_signal(story):
+        signal_client.reply_to_story(story["sender"]["number"], story["timestamp"], reply_body)
+    else:
+        signal_client.send_message(story["sender"]["number"], f"This is a reply to an expired story of yours: {reply_body}")
 
     return make_response("", 204)
 

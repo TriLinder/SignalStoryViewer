@@ -32,7 +32,7 @@ class SignalClient:
                 else:
                     print(f"Unknown message: `{message}`")
 
-                time.sleep(0.25)    
+                time.sleep(1)    
 
     def process_story_message(self, message) -> None:
         print(f"Processing story message: `{message}`")
@@ -73,8 +73,15 @@ class SignalClient:
 
     def send_view_receipt(self, sender_number, message_timestamp):
         print("Sending view receipt")
-        result = subprocess.run(["flatpak", "run", "org.asamk.SignalCli", "--output=json", "-a", self.phone_number, "sendReceipt", "--type", "viewed", sender_number, "-t", str(message_timestamp)], capture_output=True, text=True)
-        print(result.stdout, result.stderr)
+        subprocess.run(["flatpak", "run", "org.asamk.SignalCli", "--output=json", "-a", self.phone_number, "sendReceipt", "--type", "viewed", sender_number, "-t", str(message_timestamp)], capture_output=True, text=True)
+
+    def reply_to_story(self, sender_number, story_timestamp, reply_body):
+        print("Replying to a story")
+        subprocess.run(["flatpak", "run", "org.asamk.SignalCli", "--output=json", "-a", self.phone_number, "send", "--storyTimestamp", story_timestamp, "--story-author", sender_number, "-m", reply_body, sender_number])
+
+    def send_message(self, reciever_number, message_body):
+        print("Sending a message")
+        subprocess.run(["flatpak", "run", "org.asamk.SignalCli", "--output=json", "-a", self.phone_number, "send", message_body, reciever_number])
 
     def get_story_id_from_timestamp(self, timestamp):
         for story_id, story in dict(self.db.data["stories"]).items():

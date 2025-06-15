@@ -8,7 +8,12 @@
     $: mediaSrc = `/story/${story.id}/media`;
 
     async function markStoryAsViewed() {
-        fetch(`/story/${story.id}/view`);
+        await fetch(`/story/${story.id}/view`);
+    }
+
+    async function reply() {
+        const replyBody = prompt();
+        await fetch(`/story/${story.id}/reply`, {method: "POST", headers: {"Content-Type": "application/json"}, body:JSON.stringify({"body": replyBody})});
     }
 
     onMount(markStoryAsViewed);
@@ -32,9 +37,7 @@
     }
 
     .navbar {
-        background-color: rgba(250, 250, 250, .25);
-        -webkit-backdrop-filter: blur(10px);
-        backdrop-filter: blur(10px);
+        background-color: rgba(250, 250, 250, .9);
 
         color: white;
 
@@ -44,6 +47,16 @@
 
         margin-top: 15px;
         padding: 15px;
+    }
+
+    .buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    button {
+        font-size: 18px;
     }
 
     .text {
@@ -85,7 +98,10 @@
 <div class="content">
     <div class="navbar-container">
         <div class="navbar">
-            <button class="back-button" on:click={function() {$currentPageStore = "overview"}}>←</button>
+            <div class="buttons">
+                <button class="back-button" on:click={function() {$currentPageStore = "overview"}}>✖</button>
+                <button class="reply-button" on:click={reply}>💬</button>
+            </div>
             <div class="text">
                 <span class="name"><b>{story.sender.name}</b></span>
                 <span class="date"><RelativeDate timestamp={story.timestamp}/></span>
