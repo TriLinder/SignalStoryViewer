@@ -3,7 +3,7 @@ export type Story = {
     timestamp: number;
     sender: {
         name: string;
-        number: string;
+        // number: string; The user's phone number, omitted by the server 
     }
     media: {
         type: "image" | "video";

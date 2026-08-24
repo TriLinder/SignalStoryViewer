@@ -3,6 +3,7 @@ from flask_svelte import render_template
 import os
 import time
 import threading
+from copy import deepcopy
 
 from .config import SIGNAL_CLI_DIRECTORY, PHONE_NUMBER, PROCESSING_INTERVAL, STORY_LIFETIME_DURATION, STORY_EXPIRATION_MODE, CLASSIC, WAIT_UNTIL_SEEN
 from .database import Database
@@ -64,7 +65,13 @@ def index():
 
 @app.get("/stories")
 def get_stories():
-    return sorted(list(db.data["stories"].values()), key=lambda story: story["timestamp"], reverse=True)
+    stories = deepcopy(list(db.data["stories"].values()))
+
+    # Remove phone numbers from the story records
+    for story in stories:
+        del story["sender"]["number"]
+
+    return sorted(stories, key=lambda story: story["timestamp"], reverse=True)
 
 @app.route("/story/<story_id>/view")
 def story_view(story_id):
@@ -105,7 +112,7 @@ def get_story_sender_avatar(story_id):
     sender = db.data["stories"][story_id]["sender"]["number"]
 
     try:
-        return send_from_directory(os.path.join(SIGNAL_CLI_DIRECTORY, "avatars"), f"profile-{sender}")
+        return send_from_directory(os.path.join(SIGNAL_CLI_DIRECTORY, "avatars"), f"profile-{sender}", download_name="", last_modified=time.time())
     except:
         return send_from_directory(os.path.join("assets"), "default_avatar.svg")
 
